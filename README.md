@@ -1,2 +1,2 @@
-# BV_3rd_-
+# BV_3rd_minsu
 김민수
