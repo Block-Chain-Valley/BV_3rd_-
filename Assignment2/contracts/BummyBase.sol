@@ -6,7 +6,7 @@ import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 contract BummyBase is BummyAccesControl, ERC721Enumerable {
     
 
-  constuctor() ERC721("Bummy","BV") {}
+  constructor() ERC721("Bummy","BV") {}
 
 
   struct Bummy {
