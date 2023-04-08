@@ -31,6 +31,9 @@ contract BCNFT is ERC721Enumerable, Ownable {
     // 지갑에 할당된 민팅권환의 개수를 저장하는 매핑
     mapping(address => uint) private _mintableOf;
 
+    // 등록한 사용자인지 확인하는 매핑
+    mapping(address => bool) private _isRegistered;
+
     //ERC721 tokenId에 맞게 유저정보(명함)를 저장하는 array
     UserProfile[] private _BusinessCards;
 
@@ -63,10 +66,7 @@ contract BCNFT is ERC721Enumerable, Ownable {
     ) external {
         address user = _msgSender();
         require(user.isContract(), "You can't register from contract");
-        require(
-            bytes(_userProfiles[user].name).length == 0,
-            "You already registered"
-        );
+        require(_isRegistered[user] == false, "You already registered");
         _userProfiles[user] = UserProfile(
             _name,
             _company,
@@ -76,6 +76,7 @@ contract BCNFT is ERC721Enumerable, Ownable {
         unchecked {
             _mintableOf[user] += free_supply;
         }
+        _isRegistered[user] = true;
         emit Register(user, _name, _company, _position, _phoneNum);
     }
 
@@ -87,10 +88,7 @@ contract BCNFT is ERC721Enumerable, Ownable {
         string calldata _phoneNum
     ) external {
         address user = _msgSender();
-        require(
-            bytes(_userProfiles[user].name).length > 0,
-            "You need to register first"
-        );
+        require(_isRegistered[user] == true, "You need to register first");
         _userProfiles[user] = UserProfile(
             _name,
             _company,
